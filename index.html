@@ -64,20 +64,25 @@
             const [showStats, setShowStats] = useState(false);
             const [showAchievement, setShowAchievement] = useState(null);
             const [installPrompt, setInstallPrompt] = useState(null);
+            const [isMuted, setIsMuted] = useState(false);
 
             // Load data from localStorage
             useEffect(() => {
                 const savedCount = localStorage.getItem('searchCount');
                 const savedHistory = localStorage.getItem('searchHistory');
+                const savedMuted = localStorage.getItem('isMuted');
+
                 if (savedCount) setCount(parseInt(savedCount));
                 if (savedHistory) setHistory(JSON.parse(savedHistory));
+                if (savedMuted) setIsMuted(savedMuted === 'true');
             }, []);
 
             // Save data to localStorage
             useEffect(() => {
                 localStorage.setItem('searchCount', count.toString());
                 localStorage.setItem('searchHistory', JSON.stringify(history));
-            }, [count, history]);
+                localStorage.setItem('isMuted', isMuted.toString());
+            }, [count, history, isMuted]);
 
             // PWA Install prompt
             useEffect(() => {
@@ -90,6 +95,8 @@
             }, []);
 
             const playSound = () => {
+                if (isMuted) return;
+
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
@@ -194,8 +201,34 @@
                         padding: '30px',
                         textAlign: 'center',
                         boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                        marginBottom: '20px'
+                        marginBottom: '20px',
+                        position: 'relative'
                     }}>
+                        <button
+                            onClick={() => setIsMuted(!isMuted)}
+                            aria-label={isMuted ? "Ton einschalten" : "Ton ausschalten"}
+                            style={{
+                                position: 'absolute',
+                                top: '15px',
+                                right: '15px',
+                                background: 'rgba(255,255,255,0.3)',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                fontSize: '20px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'background 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.5)'}
+                            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
+                        >
+                            {isMuted ? "🔇" : "🔊"}
+                        </button>
+
                         <h1 style={{ fontSize: '28px', marginBottom: '10px', color: '#333' }}>
                             🔍 Handy Such-Tracker
                         </h1>
@@ -214,7 +247,9 @@
                         position: 'relative'
                     }}>
                         {showAchievement && (
-                            <div style={{
+                            <div
+                                role="alert"
+                                style={{
                                 position: 'absolute',
                                 top: '-20px',
                                 left: '50%',
@@ -248,6 +283,7 @@
 
                         <button
                             onClick={handleClick}
+                            aria-label="Handy gesucht! Suche zählen"
                             style={{
                                 background: 'linear-gradient(135deg, #FF6B9D, #C44569)',
                                 color: 'white',
@@ -273,22 +309,23 @@
                             <button
                                 onClick={handleUndo}
                                 disabled={count === 0}
+                                aria-label="Letzte Suche rückgängig machen"
                                 style={{
-                                    background: count === 0 ? '#ddd' : '#FFE5EC',
-                                    color: '#333',
+                                    background: count === 0 ? '#E0E0E0' : '#FFE5EC',
+                                    color: count === 0 ? '#757575' : '#333',
                                     border: 'none',
                                     padding: '12px 24px',
                                     borderRadius: '12px',
                                     fontSize: '14px',
                                     fontWeight: '600',
                                     cursor: count === 0 ? 'not-allowed' : 'pointer',
-                                    opacity: count === 0 ? 0.5 : 1
                                 }}
                             >
                                 ↩️ Rückgängig
                             </button>
                             <button
                                 onClick={() => setShowStats(!showStats)}
+                                aria-label={showStats ? "Statistik ausblenden" : "Statistik anzeigen"}
                                 style={{
                                     background: '#E3F2FD',
                                     color: '#333',
@@ -304,6 +341,7 @@
                             </button>
                             <button
                                 onClick={handleReset}
+                                aria-label="Alle Daten zurücksetzen"
                                 style={{
                                     background: '#FFEBEE',
                                     color: '#333',
