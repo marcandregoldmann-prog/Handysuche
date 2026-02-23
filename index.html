@@ -372,6 +372,21 @@
             100: { title: "Jahrhundert-Fail! 🎆", text: "Legendär schlecht organisiert! Ein Meilenstein!" }
         };
 
+        // --- Validation ---
+        try {
+            Object.entries(achievementsList).forEach(([threshold, achievement]) => {
+                if (isNaN(threshold)) console.error(`Achievement threshold "${threshold}" is not a number.`);
+                if (!achievement.title || typeof achievement.title !== 'string') {
+                    console.error(`Achievement for threshold ${threshold} is missing a valid title.`);
+                }
+                if (!achievement.text || typeof achievement.text !== 'string') {
+                    console.error(`Achievement for threshold ${threshold} is missing a valid text.`);
+                }
+            });
+        } catch (e) {
+            console.error('Achievement validation failed', e);
+        }
+
         // --- Components ---
 
         function StatBox({ label, value, icon }) {
