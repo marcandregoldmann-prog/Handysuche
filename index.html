@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/pwa-192x192.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFB6C1">
     <meta name="description" content="Handy Such-Tracker - Wie oft suchst du dein Handy?">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,8 +16,6 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
-
         :root {
             --primary-bg: #FFE5EC;
             --accent-pink: #FF6B9D;
@@ -28,7 +27,6 @@
             --font-main: 'Inter', sans-serif;
             --font-heading: 'Poppins', sans-serif;
         }
-
         * {
             margin: 0;
             padding: 0;
@@ -48,7 +46,6 @@
             max-width: 500px;
             margin: 0 auto;
         }
-
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -59,8 +56,6 @@
             box-shadow: 0 8px 32px rgba(196, 69, 105, 0.1);
             margin-bottom: 24px;
             transition: transform 0.2s ease;
-            text-align: center;
-            position: relative;
         }
 
         .glass-panel:hover {
@@ -394,6 +389,87 @@
                 randomSound();
             };
 
+            const playSadTrombone = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                const playNote = (freq, startTime, duration) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    // Slide down
+                    osc.frequency.linearRampToValueAtTime(freq - 20, startTime + duration);
+
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.linearRampToValueAtTime(0, startTime + duration);
+
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                };
+
+                const now = audioContext.currentTime;
+                playNote(392, now, 0.3);       // G4
+                playNote(370, now + 0.3, 0.3); // F#4
+                playNote(349, now + 0.6, 0.3); // F4
+                playNote(330, now + 0.9, 0.8); // E4 (long)
+            };
+
+            const playGlitch = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'square';
+                const now = audioContext.currentTime;
+
+                // Rapid random frequency changes
+                for(let i = 0; i < 10; i++) {
+                    osc.frequency.setValueAtTime(200 + Math.random() * 800, now + i * 0.05);
+                }
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+                osc.start(now);
+                osc.stop(now + 0.5);
+            };
+
+            const playCartoonFall = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'triangle';
+                const now = audioContext.currentTime;
+
+                osc.frequency.setValueAtTime(1000, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 1); // Slide down
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 1);
+
+                osc.start(now);
+                osc.stop(now + 1);
+            };
+
+            const playMockingSound = () => {
+                const sounds = [playSadTrombone, playGlitch, playCartoonFall];
+                const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+                randomSound();
+            };
+
             const checkAchievements = (newCount) => {
                 const achievement = achievementsList[newCount];
                 if (achievement) {
@@ -419,7 +495,6 @@
                 setCount(newCount);
                 setHistory([...history, new Date().toISOString()]);
                 playMockingSound();
-                vibrate();
                 checkAchievements(newCount);
             };
 
@@ -560,7 +635,7 @@
                             </div>
                         )}
 
-                        <div key={count} className="counter-display" role="status" aria-label={`Aktuelle Suche: ${count}`} style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
+                        <div key={count} className="counter-display" style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
                             {count}
                         </div>
 
@@ -587,12 +662,6 @@
                                 className={`action-btn ${showStats ? 'primary-ghost' : 'secondary'}`}
                             >
                                 <span>📊</span> Statistik
-                            </button>
-                            <button
-                                onClick={() => setShowAchievementsList(!showAchievementsList)}
-                                className={`action-btn ${showAchievementsList ? 'primary-ghost' : 'secondary'}`}
-                            >
-                                <span>🏆</span> Erfolge
                             </button>
                             <button
                                 onClick={handleReset}
@@ -627,48 +696,6 @@
                                 <StatCard label="Diese Woche" value={stats.weekCount} emoji="📆" />
                                 <StatCard label="Ø pro Tag" value={stats.avgPerDay} emoji="📈" />
                                 <StatCard label="Tage dabei" value={stats.daysSince} emoji="⏰" />
-                            </div>
-                        </div>
-                    )}
-
-                    {showAchievementsList && (
-                        <div className="glass-panel" style={{ animation: 'fadeIn 0.3s ease-out' }}>
-                            <h2 style={{
-                                marginBottom: '20px',
-                                color: 'var(--text-main)',
-                                fontFamily: 'var(--font-heading)',
-                                fontSize: '20px'
-                            }}>
-                                🏆 Deine Erfolge ({unlockedAchievements.length}/{Object.keys(achievementsList).length})
-                            </h2>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                {Object.entries(achievementsList).map(([key, value]) => {
-                                    const isUnlocked = unlockedAchievements.includes(parseInt(key));
-                                    return (
-                                        <div key={key} style={{
-                                            padding: '16px',
-                                            borderRadius: '16px',
-                                            background: isUnlocked ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.05)',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '12px',
-                                            opacity: isUnlocked ? 1 : 0.6,
-                                            textAlign: 'left'
-                                        }}>
-                                            <div style={{ fontSize: '24px' }}>{isUnlocked ? '🔓' : '🔒'}</div>
-                                            <div>
-                                                <div style={{ fontWeight: '700', color: isUnlocked ? 'var(--text-main)' : 'var(--text-secondary)' }}>
-                                                    {value.title}
-                                                </div>
-                                                {isUnlocked && (
-                                                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                                                        {value.text}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
                             </div>
                         </div>
                     )}
