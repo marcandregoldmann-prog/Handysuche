@@ -33,6 +33,7 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
+
         body {
             font-family: var(--font-main);
             background: linear-gradient(135deg, #FFF0F3 0%, #FFE5EC 100%);
@@ -40,6 +41,7 @@
             padding: 20px;
             color: var(--text-main);
         }
+
         #root {
             max-width: 500px;
             margin: 0 auto;
@@ -189,6 +191,7 @@
             border: 1px solid var(--glass-border);
             animation: slideIn 0.5s ease-out;
         }
+
         .install-banner button {
             background: var(--accent-pink);
             color: white;
@@ -219,6 +222,23 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        const achievementsList = {
+            1: { title: "Erster Fail! 🎉", text: "Das erste Mal ist immer was Besonderes" },
+            2: { title: "Doppelt hält besser ✌️", text: "Einmal ist keinmal, oder?" },
+            3: { title: "Aller guten Dinge sind drei 🍀", text: "Jetzt wird es langsam ernst." },
+            5: { title: "Anfänger-Chaos 🤦", text: "5 Mal? Langsam wird's zur Gewohnheit!" },
+            10: { title: "Zehn Finger, zehn Fails 🙌", text: "Respekt für die Beständigkeit!" },
+            20: { title: "Zwanzigmal Verpeilt 😵", text: "Hast du ein Loch in der Tasche?" },
+            30: { title: "Dreißig Suchaktionen 🕵️", text: "Du solltest Detektiv werden... oder auch nicht." },
+            40: { title: "Vierzig Fragezeichen ❓", text: "Vielleicht solltest du es anbinden?" },
+            50: { title: "Halbhundert! 🎊", text: "Das Handy läuft vor dir weg!" },
+            60: { title: "Sechzig Sekunden? Nein, Stunden! ⏱️", text: "So viel Zeit beim Suchen verschwendet." },
+            70: { title: "Siebzig Sünden 😈", text: "Dein Handy hasst dich mittlerweile." },
+            80: { title: "Achtzig Ach du Schreck 😱", text: "Bald ist es dreistellig!" },
+            90: { title: "Neunzig Nieten 🎟️", text: "Fast geschafft... leider." },
+            100: { title: "Jahrhundert-Fail! 🎆", text: "Legendär schlecht organisiert! Ein Meilenstein!" }
+        };
+
         function App() {
             const [count, setCount] = useState(0);
             const [history, setHistory] = useState([]);
@@ -226,16 +246,28 @@
             const [showAchievement, setShowAchievement] = useState(null);
             const [installPrompt, setInstallPrompt] = useState(null);
             const [isMuted, setIsMuted] = useState(false);
+            const [canShare, setCanShare] = useState(false);
+            const [unlockedAchievements, setUnlockedAchievements] = useState([]);
+            const [showAchievementsList, setShowAchievementsList] = useState(false);
+
+            // Check if Web Share API is available
+            useEffect(() => {
+                if (navigator.share) {
+                    setCanShare(true);
+                }
+            }, []);
 
             // Load data from localStorage
             useEffect(() => {
                 const savedCount = localStorage.getItem('searchCount');
                 const savedHistory = localStorage.getItem('searchHistory');
                 const savedMuted = localStorage.getItem('isMuted');
+                const savedAchievements = localStorage.getItem('unlockedAchievements');
 
                 if (savedCount) setCount(parseInt(savedCount));
                 if (savedHistory) setHistory(JSON.parse(savedHistory));
                 if (savedMuted) setIsMuted(savedMuted === 'true');
+                if (savedAchievements) setUnlockedAchievements(JSON.parse(savedAchievements));
             }, []);
 
             // Save data to localStorage
@@ -243,7 +275,8 @@
                 localStorage.setItem('searchCount', count.toString());
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 localStorage.setItem('isMuted', isMuted.toString());
-            }, [count, history, isMuted]);
+                localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+            }, [count, history, isMuted, unlockedAchievements]);
 
             // PWA Install prompt
             useEffect(() => {
@@ -356,19 +389,104 @@
                 randomSound();
             };
 
-            const checkAchievements = (newCount) => {
-                const achievements = {
-                    1: { title: "Erster Fail! 🎉", text: "Das erste Mal ist immer was Besonderes" },
-                    5: { title: "Anfänger-Chaos 🤦", text: "5 Mal? Langsam wird's zur Gewohnheit!" },
-                    10: { title: "Zehn Finger, zehn Fails 🙌", text: "Respekt für die Beständigkeit!" },
-                    25: { title: "Profi-Verlierer 🏆", text: "Du bist richtig gut darin!" },
-                    50: { title: "Halbhundert! 🎊", text: "Das Handy läuft vor dir weg!" },
-                    100: { title: "Jahrhundert-Fail! 🎆", text: "Legendär schlecht organisiert!" }
+            const playSadTrombone = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                const playNote = (freq, startTime, duration) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    // Slide down
+                    osc.frequency.linearRampToValueAtTime(freq - 20, startTime + duration);
+
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.linearRampToValueAtTime(0, startTime + duration);
+
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
                 };
 
-                if (achievements[newCount]) {
-                    setShowAchievement(achievements[newCount]);
+                const now = audioContext.currentTime;
+                playNote(392, now, 0.3);       // G4
+                playNote(370, now + 0.3, 0.3); // F#4
+                playNote(349, now + 0.6, 0.3); // F4
+                playNote(330, now + 0.9, 0.8); // E4 (long)
+            };
+
+            const playGlitch = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'square';
+                const now = audioContext.currentTime;
+
+                // Rapid random frequency changes
+                for(let i = 0; i < 10; i++) {
+                    osc.frequency.setValueAtTime(200 + Math.random() * 800, now + i * 0.05);
+                }
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+                osc.start(now);
+                osc.stop(now + 0.5);
+            };
+
+            const playCartoonFall = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'triangle';
+                const now = audioContext.currentTime;
+
+                osc.frequency.setValueAtTime(1000, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 1); // Slide down
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 1);
+
+                osc.start(now);
+                osc.stop(now + 1);
+            };
+
+            const playMockingSound = () => {
+                const sounds = [playSadTrombone, playGlitch, playCartoonFall];
+                const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+                randomSound();
+            };
+
+            const checkAchievements = (newCount) => {
+                const achievement = achievementsList[newCount];
+                if (achievement) {
+                    setShowAchievement(achievement);
+                    setUnlockedAchievements(prev => {
+                        if (!prev.includes(newCount)) {
+                            return [...prev, newCount];
+                        }
+                        return prev;
+                    });
                     setTimeout(() => setShowAchievement(null), 3000);
+                }
+            };
+
+            const vibrate = () => {
+                if (navigator.vibrate) {
+                    navigator.vibrate(200);
                 }
             };
 
@@ -378,6 +496,20 @@
                 setHistory([...history, new Date().toISOString()]);
                 playMockingSound();
                 checkAchievements(newCount);
+            };
+
+            const handleShare = async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'Handy Such-Tracker',
+                            text: `Ich habe mein Handy schon ${count} mal gesucht! Wie oft suchst du deins? 🤦‍♂️`,
+                            url: window.location.href,
+                        });
+                    } catch (err) {
+                        console.error('Error sharing:', err);
+                    }
+                }
             };
 
             const handleUndo = () => {
@@ -391,6 +523,7 @@
                 if (window.confirm('Wirklich alles zurücksetzen? 🤔')) {
                     setCount(0);
                     setHistory([]);
+                    setUnlockedAchievements([]);
                 }
             };
 
@@ -536,6 +669,15 @@
                             >
                                 <span>🗑️</span> Reset
                             </button>
+                            {canShare && (
+                                <button
+                                    onClick={handleShare}
+                                    className="action-btn secondary"
+                                    aria-label="Ergebnis teilen"
+                                >
+                                    <span>📤</span> Teilen
+                                </button>
+                            )}
                         </div>
                     </div>
 
@@ -575,13 +717,13 @@
         root.render(<App />);
     </script>
 
-    <!-- Service Worker Registration -->
+    <!-- Service Worker Registration (simplified for single file) -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Create service worker inline
+                // Create service worker inline for basic caching
                 const swCode = `
-                    const CACHE_NAME = 'handy-sucher-v1';
+                    const CACHE_NAME = 'handy-sucher-v2';
                     const urlsToCache = [
                         '/',
                         'https://unpkg.com/react@18/umd/react.production.min.js',
