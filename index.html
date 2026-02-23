@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#FFB6C1">
     <meta name="description" content="Handy Such-Tracker - Wie oft suchst du dein Handy?">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkhhbmR5IFN1Y2gtVHJhY2tlciIsCiAgInNob3J0X25hbWUiOiAiSGFuZHkgU3VjaGVyIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRkY1RTQiLAogICJ0aGVtZV9jb2xvciI6ICIjRkZCNkMxIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSXlOVFlpSUdobGFXZG9kRDBpTWpVMklqNDhjbVZqZENCM2FXUjBhRDBpTWpVMklpQm9aV2xuYUhROUlqSTFOaUlnWm1sc2JEMGlJMFpHUWpaRE1TSXZQanh6ZG1jZ2VEMGlNVEk0SWlCNVBTSXhNamdpUGp3aGxTMHRJRTFoYm1SaFluUmxJR2xqYjI0Z0xTMCtQSFJsZUhRZ2VEMGlNQ0lnZVQwaU1DSWdabTl1ZEMxemFYcGxQU0k0TUNJZ1ptbHNiRDBpSXpNek15SStmandpOkh5QThMM1JsZUhRK1BDOXpkbWMrUEM5emRtYytUIiwKICAgICAgInNpemVzIjogIjI1NngyNTYiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSTFNVElpSUdobGFXZG9kRDBpTlRFeUlqNDhjbVZqZENCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnWm1sc2JEMGlJMFpHUWpaRE1TSXZQanh6ZG1jZ2VEMGlNalUySWlCNVBTSXlOVFlpUGp3aGxTMHRJRTFoYm1SaFluUmxJR2xqYjI0Z0xTMCtQSFJsZUhRZ2VEMGlNQ0lnZVQwaU1DSWdabTl1ZEMxemFYcGxQU0l4TmpBaUlHWnBiR3c5SWlNek16TWlQbjU4ZnlBOEwzUmxlSFErUEM5emRtYytQQzl6ZG1jKyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
     <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI0ZGQjZDMSIvPjxzdmcgeD0iMTI4IiB5PSIxMjgiPjwhLS0gTWFuZGF0ZSBpY29uIC0tPjx0ZXh0IHg9IjAiIHk9IjAiIGZvbnQtc2l6ZT0iODAiIGZpbGw9IiMzMzMiPvCfkpc8L3RleHQ+PC9zdmc+PC9zdmc+">
     <title>Handy Such-Tracker</title>
@@ -12,43 +15,209 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
+
+        :root {
+            --primary-bg: #FFE5EC;
+            --accent-pink: #FF6B9D;
+            --accent-dark: #C44569;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #2D3436;
+            --text-secondary: #636E72;
+            --font-main: 'Inter', sans-serif;
+            --font-heading: 'Poppins', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #FFF5E4 0%, #FFE5EC 100%);
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, #FFF0F3 0%, #FFE5EC 100%);
             min-height: 100vh;
             padding: 20px;
+            color: var(--text-main);
         }
+
         #root {
             max-width: 500px;
             margin: 0 auto;
         }
-        .install-banner {
-            background: #FFB6C1;
-            color: #333;
-            padding: 12px 16px;
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(196, 69, 105, 0.1);
+            margin-bottom: 24px;
+            transition: transform 0.2s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(196, 69, 105, 0.15);
+        }
+
+        .main-button {
+            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
+            border: none;
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            cursor: pointer;
+            box-shadow:
+                20px 20px 60px #d1d9e6,
+                -20px -20px 60px #ffffff;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(255,255,255,0.2), transparent);
+            border-radius: 50%;
+        }
+
+        .main-button:active {
+            transform: scale(0.95);
+            box-shadow:
+                inset 10px 10px 20px #d6a4a4,
+                inset -10px -10px 20px #ffffff;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
             border-radius: 12px;
-            margin-bottom: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-main);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-main);
+        }
+
+        .action-btn.primary-ghost {
+            background: rgba(255, 107, 157, 0.1);
+            color: var(--accent-dark);
+        }
+
+        .counter-display {
+            font-size: 8rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            line-height: 1;
+            filter: drop-shadow(0 4px 12px rgba(196, 69, 105, 0.2));
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-dark);
+            font-family: var(--font-heading);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .install-banner {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.5s ease-out;
         }
+
         .install-banner button {
-            background: white;
+            background: var(--accent-pink);
+            color: white;
             border: none;
             padding: 8px 16px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             font-size: 14px;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
         }
-        .install-banner button:active {
-            transform: scale(0.95);
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -58,6 +227,23 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        const achievementsList = {
+            1: { title: "Erster Fail! 🎉", text: "Das erste Mal ist immer was Besonderes" },
+            2: { title: "Doppelt hält besser ✌️", text: "Einmal ist keinmal, oder?" },
+            3: { title: "Aller guten Dinge sind drei 🍀", text: "Jetzt wird es langsam ernst." },
+            5: { title: "Anfänger-Chaos 🤦", text: "5 Mal? Langsam wird's zur Gewohnheit!" },
+            10: { title: "Zehn Finger, zehn Fails 🙌", text: "Respekt für die Beständigkeit!" },
+            20: { title: "Zwanzigmal Verpeilt 😵", text: "Hast du ein Loch in der Tasche?" },
+            30: { title: "Dreißig Suchaktionen 🕵️", text: "Du solltest Detektiv werden... oder auch nicht." },
+            40: { title: "Vierzig Fragezeichen ❓", text: "Vielleicht solltest du es anbinden?" },
+            50: { title: "Halbhundert! 🎊", text: "Das Handy läuft vor dir weg!" },
+            60: { title: "Sechzig Sekunden? Nein, Stunden! ⏱️", text: "So viel Zeit beim Suchen verschwendet." },
+            70: { title: "Siebzig Sünden 😈", text: "Dein Handy hasst dich mittlerweile." },
+            80: { title: "Achtzig Ach du Schreck 😱", text: "Bald ist es dreistellig!" },
+            90: { title: "Neunzig Nieten 🎟️", text: "Fast geschafft... leider." },
+            100: { title: "Jahrhundert-Fail! 🎆", text: "Legendär schlecht organisiert! Ein Meilenstein!" }
+        };
+
         function App() {
             const [count, setCount] = useState(0);
             const [history, setHistory] = useState([]);
@@ -65,16 +251,28 @@
             const [showAchievement, setShowAchievement] = useState(null);
             const [installPrompt, setInstallPrompt] = useState(null);
             const [isMuted, setIsMuted] = useState(false);
+            const [canShare, setCanShare] = useState(false);
+            const [unlockedAchievements, setUnlockedAchievements] = useState([]);
+            const [showAchievementsList, setShowAchievementsList] = useState(false);
+
+            // Check if Web Share API is available
+            useEffect(() => {
+                if (navigator.share) {
+                    setCanShare(true);
+                }
+            }, []);
 
             // Load data from localStorage
             useEffect(() => {
                 const savedCount = localStorage.getItem('searchCount');
                 const savedHistory = localStorage.getItem('searchHistory');
                 const savedMuted = localStorage.getItem('isMuted');
+                const savedAchievements = localStorage.getItem('unlockedAchievements');
 
                 if (savedCount) setCount(parseInt(savedCount));
                 if (savedHistory) setHistory(JSON.parse(savedHistory));
                 if (savedMuted) setIsMuted(savedMuted === 'true');
+                if (savedAchievements) setUnlockedAchievements(JSON.parse(savedAchievements));
             }, []);
 
             // Save data to localStorage
@@ -82,7 +280,8 @@
                 localStorage.setItem('searchCount', count.toString());
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 localStorage.setItem('isMuted', isMuted.toString());
-            }, [count, history, isMuted]);
+                localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+            }, [count, history, isMuted, unlockedAchievements]);
 
             // PWA Install prompt
             useEffect(() => {
@@ -94,7 +293,7 @@
                 return () => window.removeEventListener('beforeinstallprompt', handler);
             }, []);
 
-            const playSound = () => {
+            const playSound = (type = 'sine', freq = 800, duration = 0.1, vol = 0.3) => {
                 if (isMuted) return;
 
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -104,29 +303,114 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                oscillator.frequency.value = 800;
-                oscillator.type = 'sine';
+                oscillator.type = type;
+                oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
                 
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(vol, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
                 
                 oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.1);
+                oscillator.stop(audioContext.currentTime + duration);
+            };
+
+            const playSadTrombone = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                const playNote = (freq, startTime, duration) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    // Slide down
+                    osc.frequency.linearRampToValueAtTime(freq - 20, startTime + duration);
+
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.linearRampToValueAtTime(0, startTime + duration);
+
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                };
+
+                const now = audioContext.currentTime;
+                playNote(392, now, 0.3);       // G4
+                playNote(370, now + 0.3, 0.3); // F#4
+                playNote(349, now + 0.6, 0.3); // F4
+                playNote(330, now + 0.9, 0.8); // E4 (long)
+            };
+
+            const playGlitch = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'square';
+                const now = audioContext.currentTime;
+
+                // Rapid random frequency changes
+                for(let i = 0; i < 10; i++) {
+                    osc.frequency.setValueAtTime(200 + Math.random() * 800, now + i * 0.05);
+                }
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+                osc.start(now);
+                osc.stop(now + 0.5);
+            };
+
+            const playCartoonFall = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'triangle';
+                const now = audioContext.currentTime;
+
+                osc.frequency.setValueAtTime(1000, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 1); // Slide down
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 1);
+
+                osc.start(now);
+                osc.stop(now + 1);
+            };
+
+            const playMockingSound = () => {
+                const sounds = [playSadTrombone, playGlitch, playCartoonFall];
+                const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+                randomSound();
             };
 
             const checkAchievements = (newCount) => {
-                const achievements = {
-                    1: { title: "Erster Fail! 🎉", text: "Das erste Mal ist immer was Besonderes" },
-                    5: { title: "Anfänger-Chaos 🤦", text: "5 Mal? Langsam wird's zur Gewohnheit!" },
-                    10: { title: "Zehn Finger, zehn Fails 🙌", text: "Respekt für die Beständigkeit!" },
-                    25: { title: "Profi-Verlierer 🏆", text: "Du bist richtig gut darin!" },
-                    50: { title: "Halbhundert! 🎊", text: "Das Handy läuft vor dir weg!" },
-                    100: { title: "Jahrhundert-Fail! 🎆", text: "Legendär schlecht organisiert!" }
-                };
-
-                if (achievements[newCount]) {
-                    setShowAchievement(achievements[newCount]);
+                const achievement = achievementsList[newCount];
+                if (achievement) {
+                    setShowAchievement(achievement);
+                    setUnlockedAchievements(prev => {
+                        if (!prev.includes(newCount)) {
+                            return [...prev, newCount];
+                        }
+                        return prev;
+                    });
                     setTimeout(() => setShowAchievement(null), 3000);
+                }
+            };
+
+            const vibrate = () => {
+                if (navigator.vibrate) {
+                    navigator.vibrate(200);
                 }
             };
 
@@ -134,8 +418,23 @@
                 const newCount = count + 1;
                 setCount(newCount);
                 setHistory([...history, new Date().toISOString()]);
-                playSound();
+                playMockingSound();
+                vibrate();
                 checkAchievements(newCount);
+            };
+
+            const handleShare = async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'Handy Such-Tracker',
+                            text: `Ich habe mein Handy schon ${count} mal gesucht! Wie oft suchst du deins? 🤦‍♂️`,
+                            url: window.location.href,
+                        });
+                    } catch (err) {
+                        console.error('Error sharing:', err);
+                    }
+                }
             };
 
             const handleUndo = () => {
@@ -149,6 +448,7 @@
                 if (window.confirm('Wirklich alles zurücksetzen? 🤔')) {
                     setCount(0);
                     setHistory([]);
+                    setUnlockedAchievements([]);
                 }
             };
 
@@ -187,7 +487,7 @@
             const stats = getStats();
 
             return (
-                <div style={{ minHeight: '100vh' }}>
+                <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
                     {installPrompt && (
                         <div className="install-banner">
                             <span>📱 Als App installieren?</span>
@@ -195,57 +495,46 @@
                         </div>
                     )}
 
-                    <div style={{
-                        background: 'linear-gradient(135deg, #FFB6C1 0%, #FFC1E0 100%)',
-                        borderRadius: '20px',
-                        padding: '30px',
-                        textAlign: 'center',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                        marginBottom: '20px',
-                        position: 'relative'
-                    }}>
+                    <div className="glass-panel" style={{ textAlign: 'center', position: 'relative' }}>
                         <button
                             onClick={() => setIsMuted(!isMuted)}
                             aria-label={isMuted ? "Ton einschalten" : "Ton ausschalten"}
                             style={{
                                 position: 'absolute',
-                                top: '15px',
-                                right: '15px',
-                                background: 'rgba(255,255,255,0.3)',
+                                top: '20px',
+                                right: '20px',
+                                background: 'rgba(255,255,255,0.5)',
                                 border: 'none',
                                 borderRadius: '50%',
                                 width: '40px',
                                 height: '40px',
-                                fontSize: '20px',
+                                fontSize: '18px',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                transition: 'background 0.2s'
+                                transition: 'all 0.2s',
+                                backdropFilter: 'blur(4px)'
                             }}
-                            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.5)'}
-                            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
                         >
                             {isMuted ? "🔇" : "🔊"}
                         </button>
 
-                        <h1 style={{ fontSize: '28px', marginBottom: '10px', color: '#333' }}>
-                            🔍 Handy Such-Tracker
+                        <h1 style={{
+                            fontSize: '32px',
+                            marginBottom: '8px',
+                            color: '#2D3436',
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: '700'
+                        }}>
+                            Handy Such-Tracker
                         </h1>
-                        <p style={{ color: '#666', fontSize: '14px' }}>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
                             Wie oft suchst du dein Handy? 🤦‍♂️
                         </p>
                     </div>
 
-                    <div style={{
-                        background: 'white',
-                        borderRadius: '20px',
-                        padding: '40px',
-                        textAlign: 'center',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                        marginBottom: '20px',
-                        position: 'relative'
-                    }}>
+                    <div className="glass-panel" style={{ textAlign: 'center', position: 'relative' }}>
                         {showAchievement && (
                             <div
                                 role="alert"
@@ -259,7 +548,8 @@
                                 borderRadius: '15px',
                                 boxShadow: '0 8px 24px rgba(255,215,0,0.4)',
                                 zIndex: 10,
-                                animation: 'slideDown 0.3s ease-out'
+                                animation: 'slideDown 0.3s ease-out',
+                                minWidth: '280px'
                             }}>
                                 <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#333' }}>
                                     {showAchievement.title}
@@ -270,144 +560,128 @@
                             </div>
                         )}
 
-                        <div style={{
-                            fontSize: '120px',
-                            fontWeight: 'bold',
-                            background: 'linear-gradient(135deg, #FF6B9D, #C44569)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            marginBottom: '30px'
-                        }}>
+                        <div key={count} className="counter-display" role="status" aria-label={`Aktuelle Suche: ${count}`} style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
                             {count}
                         </div>
 
                         <button
+                            className="main-button"
                             onClick={handleClick}
                             aria-label="Handy gesucht! Suche zählen"
-                            style={{
-                                background: 'linear-gradient(135deg, #FF6B9D, #C44569)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '180px',
-                                height: '180px',
-                                fontSize: '24px',
-                                fontWeight: 'bold',
-                                cursor: 'pointer',
-                                boxShadow: '0 8px 24px rgba(255,107,157,0.3)',
-                                transition: 'transform 0.1s',
-                                marginBottom: '20px'
-                            }}
-                            onMouseDown={(e) => e.target.style.transform = 'scale(0.95)'}
-                            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
-                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                         >
-                            Handy gesucht! 🔍
+                            <span style={{fontSize: '40px', marginBottom: '8px', display: 'block'}}>🔍</span>
+                            Handy gesucht!
                         </button>
 
-                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <button
                                 onClick={handleUndo}
                                 disabled={count === 0}
-                                aria-label="Letzte Suche rückgängig machen"
-                                style={{
-                                    background: count === 0 ? '#E0E0E0' : '#FFE5EC',
-                                    color: count === 0 ? '#757575' : '#333',
-                                    border: 'none',
-                                    padding: '12px 24px',
-                                    borderRadius: '12px',
-                                    fontSize: '14px',
-                                    fontWeight: '600',
-                                    cursor: count === 0 ? 'not-allowed' : 'pointer',
-                                }}
+                                className={`action-btn secondary`}
+                                style={{ opacity: count === 0 ? 0.5 : 1, cursor: count === 0 ? 'not-allowed' : 'pointer' }}
                             >
-                                ↩️ Rückgängig
+                                <span>↩️</span> Rückgängig
                             </button>
                             <button
                                 onClick={() => setShowStats(!showStats)}
-                                aria-label={showStats ? "Statistik ausblenden" : "Statistik anzeigen"}
-                                style={{
-                                    background: '#E3F2FD',
-                                    color: '#333',
-                                    border: 'none',
-                                    padding: '12px 24px',
-                                    borderRadius: '12px',
-                                    fontSize: '14px',
-                                    fontWeight: '600',
-                                    cursor: 'pointer'
-                                }}
+                                className={`action-btn ${showStats ? 'primary-ghost' : 'secondary'}`}
                             >
-                                📊 Statistik
+                                <span>📊</span> Statistik
+                            </button>
+                            <button
+                                onClick={() => setShowAchievementsList(!showAchievementsList)}
+                                className={`action-btn ${showAchievementsList ? 'primary-ghost' : 'secondary'}`}
+                            >
+                                <span>🏆</span> Erfolge
                             </button>
                             <button
                                 onClick={handleReset}
-                                aria-label="Alle Daten zurücksetzen"
-                                style={{
-                                    background: '#FFEBEE',
-                                    color: '#333',
-                                    border: 'none',
-                                    padding: '12px 24px',
-                                    borderRadius: '12px',
-                                    fontSize: '14px',
-                                    fontWeight: '600',
-                                    cursor: 'pointer'
-                                }}
+                                className="action-btn secondary"
                             >
-                                🗑️ Reset
+                                <span>🗑️</span> Reset
                             </button>
+                            {canShare && (
+                                <button
+                                    onClick={handleShare}
+                                    className="action-btn secondary"
+                                    aria-label="Ergebnis teilen"
+                                >
+                                    <span>📤</span> Teilen
+                                </button>
+                            )}
                         </div>
                     </div>
 
                     {showStats && stats && (
-                        <div style={{
-                            background: 'white',
-                            borderRadius: '20px',
-                            padding: '30px',
-                            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                            animation: 'fadeIn 0.3s ease-out'
-                        }}>
-                            <h2 style={{ marginBottom: '20px', color: '#333' }}>📊 Deine Such-Statistik</h2>
-                            <div style={{ display: 'grid', gap: '15px' }}>
-                                <StatCard label="Heute gesucht" value={stats.todayCount} emoji="📅" />
+                        <div className="glass-panel" style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                            <h2 style={{
+                                marginBottom: '20px',
+                                color: 'var(--text-main)',
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '20px'
+                            }}>
+                                📊 Deine Such-Statistik
+                            </h2>
+                            <div className="stat-grid">
+                                <StatCard label="Heute" value={stats.todayCount} emoji="📅" />
                                 <StatCard label="Diese Woche" value={stats.weekCount} emoji="📆" />
-                                <StatCard label="Durchschnitt/Tag" value={stats.avgPerDay} emoji="📈" />
-                                <StatCard label="Tage seit Tracking-Start" value={stats.daysSince} emoji="⏰" />
+                                <StatCard label="Ø pro Tag" value={stats.avgPerDay} emoji="📈" />
+                                <StatCard label="Tage dabei" value={stats.daysSince} emoji="⏰" />
                             </div>
                         </div>
                     )}
 
-                    <style>{`
-                        @keyframes slideDown {
-                            from {
-                                transform: translateX(-50%) translateY(-40px);
-                                opacity: 0;
-                            }
-                            to {
-                                transform: translateX(-50%) translateY(0);
-                                opacity: 1;
-                            }
-                        }
-                        @keyframes fadeIn {
-                            from { opacity: 0; transform: translateY(20px); }
-                            to { opacity: 1; transform: translateY(0); }
-                        }
-                    `}</style>
+                    {showAchievementsList && (
+                        <div className="glass-panel" style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                            <h2 style={{
+                                marginBottom: '20px',
+                                color: 'var(--text-main)',
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '20px'
+                            }}>
+                                🏆 Deine Erfolge ({unlockedAchievements.length}/{Object.keys(achievementsList).length})
+                            </h2>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {Object.entries(achievementsList).map(([key, value]) => {
+                                    const isUnlocked = unlockedAchievements.includes(parseInt(key));
+                                    return (
+                                        <div key={key} style={{
+                                            padding: '16px',
+                                            borderRadius: '16px',
+                                            background: isUnlocked ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.05)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            opacity: isUnlocked ? 1 : 0.6,
+                                            textAlign: 'left'
+                                        }}>
+                                            <div style={{ fontSize: '24px' }}>{isUnlocked ? '🔓' : '🔒'}</div>
+                                            <div>
+                                                <div style={{ fontWeight: '700', color: isUnlocked ? 'var(--text-main)' : 'var(--text-secondary)' }}>
+                                                    {value.title}
+                                                </div>
+                                                {isUnlocked && (
+                                                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                                                        {value.text}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         }
 
         function StatCard({ label, value, emoji }) {
             return (
-                <div style={{
-                    background: 'linear-gradient(135deg, #FFF5E4 0%, #FFE5EC 100%)',
-                    padding: '20px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }}>
-                    <span style={{ fontSize: '16px', color: '#666' }}>{emoji} {label}</span>
-                    <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>{value}</span>
+                <div className="stat-item">
+                    <div style={{ fontSize: '24px', marginBottom: '4px' }}>{emoji}</div>
+                    <div className="stat-value">{value}</div>
+                    <div className="stat-label">{label}</div>
                 </div>
             );
         }
@@ -416,13 +690,13 @@
         root.render(<App />);
     </script>
 
-    <!-- Service Worker Registration -->
+    <!-- Service Worker Registration (simplified for single file) -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Create service worker inline
+                // Create service worker inline for basic caching
                 const swCode = `
-                    const CACHE_NAME = 'handy-sucher-v1';
+                    const CACHE_NAME = 'handy-sucher-v2';
                     const urlsToCache = [
                         '/',
                         'https://unpkg.com/react@18/umd/react.production.min.js',
