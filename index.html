@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/pwa-192x192.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFB6C1">
     <meta name="description" content="Handy Such-Tracker - Wie oft suchst du dein Handy?">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -344,6 +345,10 @@
                 const savedHistory = safeStorage.getItem('searchHistory');
                 const savedMuted = safeStorage.getItem('isMuted');
                 const savedAchievements = safeStorage.getItem('unlockedAchievements');
+                const savedCount = localStorage.getItem('searchCount');
+                const savedHistory = localStorage.getItem('searchHistory');
+                const savedMuted = localStorage.getItem('isMuted');
+                const savedAchievements = localStorage.getItem('unlockedAchievements');
 
                 if (savedCount) setCount(parseInt(savedCount));
                 if (savedHistory) setHistory(JSON.parse(savedHistory));
@@ -357,6 +362,10 @@
                 safeStorage.setItem('searchHistory', JSON.stringify(history));
                 safeStorage.setItem('isMuted', isMuted.toString());
                 safeStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                localStorage.setItem('searchCount', count.toString());
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+                localStorage.setItem('isMuted', isMuted.toString());
+                localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
             }, [count, history, isMuted, unlockedAchievements]);
 
             // PWA Install prompt
@@ -387,6 +396,87 @@
                 
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + duration);
+            };
+
+            const playSadTrombone = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                const playNote = (freq, startTime, duration) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    // Slide down
+                    osc.frequency.linearRampToValueAtTime(freq - 20, startTime + duration);
+
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.linearRampToValueAtTime(0, startTime + duration);
+
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                };
+
+                const now = audioContext.currentTime;
+                playNote(392, now, 0.3);       // G4
+                playNote(370, now + 0.3, 0.3); // F#4
+                playNote(349, now + 0.6, 0.3); // F4
+                playNote(330, now + 0.9, 0.8); // E4 (long)
+            };
+
+            const playGlitch = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'square';
+                const now = audioContext.currentTime;
+
+                // Rapid random frequency changes
+                for(let i = 0; i < 10; i++) {
+                    osc.frequency.setValueAtTime(200 + Math.random() * 800, now + i * 0.05);
+                }
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+                osc.start(now);
+                osc.stop(now + 0.5);
+            };
+
+            const playCartoonFall = () => {
+                if (isMuted) return;
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'triangle';
+                const now = audioContext.currentTime;
+
+                osc.frequency.setValueAtTime(1000, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 1); // Slide down
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 1);
+
+                osc.start(now);
+                osc.stop(now + 1);
+            };
+
+            const playMockingSound = () => {
+                const sounds = [playSadTrombone, playGlitch, playCartoonFall];
+                const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+                randomSound();
             };
 
             const playSadTrombone = () => {
@@ -637,6 +727,7 @@
                         )}
 
                         <div key={count} className="counter-display" role="status" aria-label={`Aktuelle Suche: ${count}`} style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
+                        <div key={count} className="counter-display" style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
                             {count}
                         </div>
 
