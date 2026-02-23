@@ -12,10 +12,38 @@
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkhhbmR5IFN1Y2gtVHJhY2tlciIsCiAgInNob3J0X25hbWUiOiAiSGFuZHkgU3VjaGVyIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRkY1RTQiLAogICJ0aGVtZV9jb2xvciI6ICIjRkZCNkMxIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSXlOVFlpSUdobGFXZG9kRDBpTWpVMklqNDhjbVZqZENCM2FXUjBhRDBpTWpVMklpQm9aV2xuYUhROUlqSTFOaUlnWm1sc2JEMGlJMFpHUWpaRE1TSXZQanh6ZG1jZ2VEMGlNVEk0SWlCNVBTSXhNamdpUGp3aGxTMHRJRTFoYm1SaFluUmxJR2xqYjI0Z0xTMCtQSFJsZUhRZ2VEMGlNQ0lnZVQwaU1DSWdabTl1ZEMxemFYcGxQU0k0TUNJZ1ptbHNiRDBpSXpNek15SStmandpOkh5QThMM1JsZUhRK1BDOXpkbWMrUEM5emRtYytUIiwKICAgICAgInNpemVzIjogIjI1NngyNTYiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSTFNVElpSUdobGFXZG9kRDBpTlRFeUlqNDhjbVZqZENCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnWm1sc2JEMGlJMFpHUWpaRE1TSXZQanh6ZG1jZ2VEMGlNalUySWlCNVBTSXlOVFlpUGp3aGxTMHRJRTFoYm1SaFluUmxJR2xqYjI0Z0xTMCtQSFJsZUhRZ2VEMGlNQ0lnZVQwaU1DSWdabTl1ZEMxemFYcGxQU0l4TmpBaUlHWnBiR3c5SWlNek16TWlQbjU4ZnlBOEwzUmxlSFErUEM5emRtYytQQzl6ZG1jKyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
     <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI0ZGQjZDMSIvPjxzdmcgeD0iMTI4IiB5PSIxMjgiPjwhLS0gTWFuZGF0ZSBpY29uIC0tPjx0ZXh0IHg9IjAiIHk9IjAiIGZvbnQtc2l6ZT0iODAiIGZpbGw9IiMzMzMiPvCfkpc8L3RleHQ+PC9zdmc+PC9zdmc+">
     <title>Handy Such-Tracker</title>
+
+    <!-- Dependencies -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Error Handling & Dependency Check -->
+    <script>
+        window.onerror = function(msg, url, line, col, error) {
+            const errorDiv = document.getElementById('error-display');
+            if (errorDiv) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML += `<p><strong>Error:</strong> ${msg}<br><small>${url}:${line}:${col}</small></p>`;
+            }
+            // Keep the loading spinner visible if fatal
+            return false;
+        };
+
+        window.addEventListener('load', function() {
+            if (!window.React || !window.ReactDOM || !window.Babel) {
+                const errorDiv = document.getElementById('error-display');
+                if (errorDiv) {
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML += `<p><strong>Dependency Error:</strong> React, ReactDOM, or Babel failed to load. Please check your internet connection.</p>`;
+                }
+            }
+        });
+    </script>
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
+
         :root {
             --primary-bg: #FFE5EC;
             --accent-pink: #FF6B9D;
@@ -27,6 +55,7 @@
             --font-main: 'Inter', sans-serif;
             --font-heading: 'Poppins', sans-serif;
         }
+
         * {
             margin: 0;
             padding: 0;
@@ -46,6 +75,35 @@
             max-width: 500px;
             margin: 0 auto;
         }
+
+        /* Error Display Styles */
+        #error-display {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ff4757;
+            border-radius: 12px;
+            color: #2f3542;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--accent-dark);
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -56,6 +114,8 @@
             box-shadow: 0 8px 32px rgba(196, 69, 105, 0.1);
             margin-bottom: 24px;
             transition: transform 0.2s ease;
+            text-align: center;
+            position: relative;
         }
 
         .glass-panel:hover {
@@ -217,10 +277,32 @@
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="error-display"></div>
+    <div id="root">
+        <div id="loading">Lädt App... ⏳</div>
+    </div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
+
+        // Safe LocalStorage Helper
+        const safeStorage = {
+            getItem: (key) => {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    console.warn('LocalStorage access denied:', e);
+                    return null;
+                }
+            },
+            setItem: (key, value) => {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    console.warn('LocalStorage access denied:', e);
+                }
+            }
+        };
 
         const achievementsList = {
             1: { title: "Erster Fail! 🎉", text: "Das erste Mal ist immer was Besonderes" },
@@ -259,6 +341,10 @@
 
             // Load data from localStorage
             useEffect(() => {
+                const savedCount = safeStorage.getItem('searchCount');
+                const savedHistory = safeStorage.getItem('searchHistory');
+                const savedMuted = safeStorage.getItem('isMuted');
+                const savedAchievements = safeStorage.getItem('unlockedAchievements');
                 const savedCount = localStorage.getItem('searchCount');
                 const savedHistory = localStorage.getItem('searchHistory');
                 const savedMuted = localStorage.getItem('isMuted');
@@ -272,6 +358,10 @@
 
             // Save data to localStorage
             useEffect(() => {
+                safeStorage.setItem('searchCount', count.toString());
+                safeStorage.setItem('searchHistory', JSON.stringify(history));
+                safeStorage.setItem('isMuted', isMuted.toString());
+                safeStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
                 localStorage.setItem('searchCount', count.toString());
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 localStorage.setItem('isMuted', isMuted.toString());
@@ -495,6 +585,7 @@
                 setCount(newCount);
                 setHistory([...history, new Date().toISOString()]);
                 playMockingSound();
+                vibrate();
                 checkAchievements(newCount);
             };
 
@@ -635,6 +726,7 @@
                             </div>
                         )}
 
+                        <div key={count} className="counter-display" role="status" aria-label={`Aktuelle Suche: ${count}`} style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
                         <div key={count} className="counter-display" style={{ animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
                             {count}
                         </div>
@@ -662,6 +754,12 @@
                                 className={`action-btn ${showStats ? 'primary-ghost' : 'secondary'}`}
                             >
                                 <span>📊</span> Statistik
+                            </button>
+                            <button
+                                onClick={() => setShowAchievementsList(!showAchievementsList)}
+                                className={`action-btn ${showAchievementsList ? 'primary-ghost' : 'secondary'}`}
+                            >
+                                <span>🏆</span> Erfolge
                             </button>
                             <button
                                 onClick={handleReset}
@@ -696,6 +794,48 @@
                                 <StatCard label="Diese Woche" value={stats.weekCount} emoji="📆" />
                                 <StatCard label="Ø pro Tag" value={stats.avgPerDay} emoji="📈" />
                                 <StatCard label="Tage dabei" value={stats.daysSince} emoji="⏰" />
+                            </div>
+                        </div>
+                    )}
+
+                    {showAchievementsList && (
+                        <div className="glass-panel" style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                            <h2 style={{
+                                marginBottom: '20px',
+                                color: 'var(--text-main)',
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '20px'
+                            }}>
+                                🏆 Deine Erfolge ({unlockedAchievements.length}/{Object.keys(achievementsList).length})
+                            </h2>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {Object.entries(achievementsList).map(([key, value]) => {
+                                    const isUnlocked = unlockedAchievements.includes(parseInt(key));
+                                    return (
+                                        <div key={key} style={{
+                                            padding: '16px',
+                                            borderRadius: '16px',
+                                            background: isUnlocked ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.05)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            opacity: isUnlocked ? 1 : 0.6,
+                                            textAlign: 'left'
+                                        }}>
+                                            <div style={{ fontSize: '24px' }}>{isUnlocked ? '🔓' : '🔒'}</div>
+                                            <div>
+                                                <div style={{ fontWeight: '700', color: isUnlocked ? 'var(--text-main)' : 'var(--text-secondary)' }}>
+                                                    {value.title}
+                                                </div>
+                                                {isUnlocked && (
+                                                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                                                        {value.text}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
