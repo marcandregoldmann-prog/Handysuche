@@ -341,7 +341,7 @@
     </div>
 
     <script type="text/babel">
-        const { useState, useEffect, useCallback } = React;
+        const { useState, useEffect, useCallback, useMemo } = React;
 
         // --- Utils ---
         const safeStorage = {
@@ -407,6 +407,79 @@
             );
         }
 
+        // --- Audio Helpers ---
+        const playSadTrombone = () => {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            const playNote = (freq, startTime, duration) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(freq, startTime);
+                // Slide down
+                osc.frequency.linearRampToValueAtTime(freq - 20, startTime + duration);
+
+                gain.gain.setValueAtTime(0.3, startTime);
+                gain.gain.linearRampToValueAtTime(0, startTime + duration);
+
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            };
+
+            const now = audioContext.currentTime;
+            playNote(392, now, 0.3);       // G4
+            playNote(370, now + 0.3, 0.3); // F#4
+            playNote(349, now + 0.6, 0.3); // F4
+            playNote(330, now + 0.9, 0.8); // E4 (long)
+        };
+
+        const playGlitch = () => {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.type = 'square';
+            const now = audioContext.currentTime;
+
+            // Rapid random frequency changes
+            for(let i = 0; i < 10; i++) {
+                osc.frequency.setValueAtTime(200 + Math.random() * 800, now + i * 0.05);
+            }
+
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+            osc.start(now);
+            osc.stop(now + 0.5);
+        };
+
+        const playCartoonFall = () => {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.type = 'triangle';
+            const now = audioContext.currentTime;
+
+            osc.frequency.setValueAtTime(1000, now);
+            osc.frequency.exponentialRampToValueAtTime(100, now + 1); // Slide down
+
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.linearRampToValueAtTime(0, now + 1);
+
+            osc.start(now);
+            osc.stop(now + 1);
+        };
+
         function App() {
             // State
             const [count, setCount] = useState(0);
@@ -447,82 +520,6 @@
                 window.addEventListener('beforeinstallprompt', handler);
                 return () => window.removeEventListener('beforeinstallprompt', handler);
             }, []);
-
-            // Audio Logic - Mocking Sounds
-            const playSadTrombone = () => {
-                if (isMuted) return;
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-                const playNote = (freq, startTime, duration) => {
-                    const osc = audioContext.createOscillator();
-                    const gain = audioContext.createGain();
-                    osc.connect(gain);
-                    gain.connect(audioContext.destination);
-
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(freq, startTime);
-                    // Slide down
-                    osc.frequency.linearRampToValueAtTime(freq - 20, startTime + duration);
-
-                    gain.gain.setValueAtTime(0.3, startTime);
-                    gain.gain.linearRampToValueAtTime(0, startTime + duration);
-
-                    osc.start(startTime);
-                    osc.stop(startTime + duration);
-                };
-
-                const now = audioContext.currentTime;
-                playNote(392, now, 0.3);       // G4
-                playNote(370, now + 0.3, 0.3); // F#4
-                playNote(349, now + 0.6, 0.3); // F4
-                playNote(330, now + 0.9, 0.8); // E4 (long)
-            };
-
-            const playGlitch = () => {
-                if (isMuted) return;
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-
-                osc.type = 'square';
-                const now = audioContext.currentTime;
-
-                // Rapid random frequency changes
-                for(let i = 0; i < 10; i++) {
-                    osc.frequency.setValueAtTime(200 + Math.random() * 800, now + i * 0.05);
-                }
-
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-
-                osc.start(now);
-                osc.stop(now + 0.5);
-            };
-
-            const playCartoonFall = () => {
-                if (isMuted) return;
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-
-                osc.type = 'triangle';
-                const now = audioContext.currentTime;
-
-                osc.frequency.setValueAtTime(1000, now);
-                osc.frequency.exponentialRampToValueAtTime(100, now + 1); // Slide down
-
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.linearRampToValueAtTime(0, now + 1);
-
-                osc.start(now);
-                osc.stop(now + 1);
-            };
 
             const playMockingSound = useCallback(() => {
                 if (isMuted) return;
@@ -568,7 +565,7 @@
             };
 
             // Stats Calculation
-            const getStats = () => {
+            const stats = useMemo(() => {
                 if (history.length === 0) return { today: 0, week: 0, avg: 0, days: 0 };
                 
                 const now = new Date();
@@ -583,9 +580,7 @@
                 const avg = (history.length / daysDiff).toFixed(1);
 
                 return { today, week, avg, days: daysDiff };
-            };
-
-            const stats = getStats();
+            }, [history]);
 
             return (
                 <div>
