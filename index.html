@@ -423,8 +423,22 @@
         }
 
         // --- Audio Helpers ---
-        const playSadTrombone = () => {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let sharedAudioContext = null;
+        const getAudioContext = () => {
+            if (!sharedAudioContext) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    sharedAudioContext = new AudioContextClass();
+                }
+            }
+            if (sharedAudioContext && sharedAudioContext.state === 'suspended') {
+                sharedAudioContext.resume();
+            }
+            return sharedAudioContext;
+        };
+
+        const playSadTrombone = (audioContext) => {
+            if (!audioContext) return;
 
             const playNote = (freq, startTime, duration) => {
                 const osc = audioContext.createOscillator();
@@ -451,8 +465,8 @@
             playNote(330, now + 0.9, 0.8); // E4 (long)
         };
 
-        const playGlitch = () => {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const playGlitch = (audioContext) => {
+            if (!audioContext) return;
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
 
@@ -474,8 +488,8 @@
             osc.stop(now + 0.5);
         };
 
-        const playCartoonFall = () => {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const playCartoonFall = (audioContext) => {
+            if (!audioContext) return;
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
 
@@ -539,9 +553,10 @@
             const playMockingSound = useCallback(() => {
                 if (isMuted) return;
                 try {
+                    const audioContext = getAudioContext();
                     const sounds = [playSadTrombone, playGlitch, playCartoonFall];
                     const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
-                    randomSound();
+                    randomSound(audioContext);
                 } catch (e) {
                     console.error("Audio error", e);
                 }
