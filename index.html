@@ -454,11 +454,8 @@
         // --- Audio Helpers ---
         let sharedAudioContext = null;
         const getAudioContext = () => {
-            if (!sharedAudioContext) {
-                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                if (AudioContextClass) {
-                    sharedAudioContext = new AudioContextClass();
-                }
+            if (!sharedAudioContext && window.AudioContext) {
+                sharedAudioContext = new AudioContext();
             }
             if (sharedAudioContext && sharedAudioContext.state === 'suspended') {
                 sharedAudioContext.resume();
