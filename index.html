@@ -31,11 +31,25 @@
                 errorDiv.style.display = 'block';
                 // Clean up the URL to just the filename if possible
                 const cleanUrl = url ? url.split('/').pop() : 'inline';
-                errorDiv.innerHTML += `
-                    <div style="margin-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 4px;">
-                        <strong>Error:</strong> ${msg}<br>
-                        <small style="color:#666">${cleanUrl}:${line}:${col}</small>
-                    </div>`;
+
+                const entry = document.createElement('div');
+                entry.style.marginBottom = '8px';
+                entry.style.borderBottom = '1px solid rgba(0,0,0,0.1)';
+                entry.style.paddingBottom = '4px';
+
+                const strong = document.createElement('strong');
+                strong.textContent = 'Error: ';
+                entry.appendChild(strong);
+
+                entry.appendChild(document.createTextNode(msg));
+                entry.appendChild(document.createElement('br'));
+
+                const small = document.createElement('small');
+                small.style.color = '#666';
+                small.textContent = `${cleanUrl}:${line}:${col}`;
+                entry.appendChild(small);
+
+                errorDiv.appendChild(entry);
             }
             return false;
         };
@@ -49,13 +63,18 @@
 
                     if (errorDiv) {
                         errorDiv.style.display = 'block';
-                        errorDiv.innerHTML += `
-                            <div style="color: #ef4444; font-weight: 600;">
-                                System Error: Core libraries failed to load.
-                            </div>
-                            <p style="margin-top: 8px; font-size: 0.9em;">
-                                Please check your internet connection and reload.
-                            </p>`;
+
+                        const systemError = document.createElement('div');
+                        systemError.style.color = '#ef4444';
+                        systemError.style.fontWeight = '600';
+                        systemError.textContent = 'System Error: Core libraries failed to load.';
+                        errorDiv.appendChild(systemError);
+
+                        const retryMsg = document.createElement('p');
+                        retryMsg.style.marginTop = '8px';
+                        retryMsg.style.fontSize = '0.9em';
+                        retryMsg.textContent = 'Please check your internet connection and reload.';
+                        errorDiv.appendChild(retryMsg);
                     }
                 }
             }, 1000); // Give it a second to initialize
