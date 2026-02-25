@@ -533,6 +533,8 @@
             const [currentAchievement, setCurrentAchievement] = useState(null);
             const [installPrompt, setInstallPrompt] = useState(null);
 
+            const unlockedSet = useMemo(() => new Set(unlocked), [unlocked]);
+
             // Load Data
             useEffect(() => {
                 const sCount = safeStorage.getItem('searchCount');
@@ -585,7 +587,7 @@
                 if (navigator.vibrate) navigator.vibrate(50);
 
                 // Check Achievements
-                if (achievementsList[newCount] && !unlocked.includes(newCount)) {
+                if (achievementsList[newCount] && !unlockedSet.has(newCount)) {
                     setCurrentAchievement(achievementsList[newCount]);
                     setUnlocked(prev => [...prev, newCount]);
                     setTimeout(() => setCurrentAchievement(null), 4000);
@@ -705,7 +707,7 @@
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '400px', overflowY: 'auto' }}>
                                     {Object.entries(achievementsList).map(([threshold, data]) => {
-                                        const isUnlocked = unlocked.includes(parseInt(threshold));
+                                        const isUnlocked = unlockedSet.has(parseInt(threshold));
                                         return (
                                             <div key={threshold} style={{
                                                 padding: '12px',
