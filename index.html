@@ -373,16 +373,25 @@
         };
 
         // --- Validation ---
-        try {
-            Object.entries(achievementsList).forEach(([threshold, achievement]) => {
-                if (isNaN(threshold)) console.error(`Achievement threshold "${threshold}" is not a number.`);
+        function validateAchievements(list) {
+            const errors = [];
+            Object.entries(list).forEach(([threshold, achievement]) => {
+                if (isNaN(threshold)) {
+                    errors.push(`Achievement threshold "${threshold}" is not a number.`);
+                }
                 if (!achievement.title || typeof achievement.title !== 'string') {
-                    console.error(`Achievement for threshold ${threshold} is missing a valid title.`);
+                    errors.push(`Achievement for threshold ${threshold} is missing a valid title.`);
                 }
                 if (!achievement.text || typeof achievement.text !== 'string') {
-                    console.error(`Achievement for threshold ${threshold} is missing a valid text.`);
+                    errors.push(`Achievement for threshold ${threshold} is missing a valid text.`);
                 }
             });
+            return errors;
+        }
+
+        try {
+            const validationErrors = validateAchievements(achievementsList);
+            validationErrors.forEach(err => console.error(err));
         } catch (e) {
             console.error('Achievement validation failed', e);
         }
